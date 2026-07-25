@@ -14,6 +14,7 @@
 | `fig4_grid_stats.csv` | 网格统计 |
 | `fig5_delta_r2.csv` | ΔR² 数据 |
 | `fig9_feature_importance.csv` | 特征重要性 |
+| `fig8_covariate_shift_data.csv` | 协变量转移数据 |
 
 ## 运行方式
 

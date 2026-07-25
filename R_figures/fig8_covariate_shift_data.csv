@@ -1,0 +1,9 @@
+depth_layer,covariate,covariate_type,contribution,available
+Surface (0-20 cm),NDVI,surface,0.85,TRUE
+Surface (0-20 cm),MAT / PET,surface,0.80,TRUE
+Surface (0-20 cm),Land cover,surface,0.75,TRUE
+Deep (>100 cm),NDVI,surface,0.10,TRUE
+Deep (>100 cm),MAT / PET,surface,0.30,TRUE
+Deep (>100 cm),Land cover,surface,0.15,TRUE
+Deep (>100 cm),Geology / Parent material,deep_specific,0.70,FALSE
+Deep (>100 cm),Groundwater depth,deep_specific,0.60,FALSE

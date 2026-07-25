@@ -1,0 +1,163 @@
+{
+  "project": "Evaluating generalization of ML for SOC prediction in China under spatial and depth constraints",
+  "frozen_date": "2026-07-25",
+  "dataset": {
+    "name": "China SOCS Database V10",
+    "doi": "10.5281/zenodo.17304024",
+    "file": "data_raw/SOCS_V10.csv",
+    "encoding": "gbk",
+    "total_rows": 23103,
+    "total_profiles": 7955,
+    "usable_rows": 19944,
+    "usable_profiles": 5877,
+    "excluded_rows_reason": "SOC_g_kg missing (3119) + SOC > 200 g/kg (40)",
+    "sha256": "3cb6a1a1d8f89413"
+  },
+  "target_variable": {
+    "raw": "SOC_g_kg",
+    "transform": "log1p",
+    "unit": "g/kg"
+  },
+  "features": {
+    "continuous": [
+      "BD_g_cm3", "pH", "Sand_%", "Silt_%", "Clay_%",
+      "DEM_m", "NDVI", "MAT_°C", "MAP_mm", "PET_mm", "AI",
+      "depth_mid", "depth_thickness"
+    ],
+    "categorical": ["CLCD"],
+    "encoding": "one-hot",
+    "imputation": "median",
+    "standardization": "StandardScaler (zero mean, unit variance)"
+  },
+  "missing_value_policy": {
+    "SOC_g_kg": "drop rows",
+    "BD_g_cm3": "impute with median (only 13.5% missing, co-occurs with SOC missing)",
+    "Sand/Silt/Clay": "impute with median (6 rows)",
+    "outlier_SOC": "exclude SOC > 200 g/kg (likely peat/wetland)"
+  },
+  "validation_framework": {
+    "primary": {
+      "name": "Spatial Block CV (5°×5° grid)",
+      "type": "GroupKFold",
+      "n_folds": 5,
+      "grouping": "floor(Latitude/5)*1000 + floor(Longitude/5)",
+      "description": "Each fold holds out ~20% of 5°×5° grid cells; prevents spatial data leakage"
+    },
+    "baseline": {
+      "name": "Random 5-Fold CV",
+      "type": "KFold",
+      "n_folds": 5,
+      "shuffle": true,
+      "description": "Standard random CV as lower-bound comparison; expected to overestimate"
+    }
+  },
+  "models": {
+    "Mean_baseline": {
+      "type": "baseline",
+      "description": "Predict training set mean; sanity check"
+    },
+    "LinearReg": {
+      "type": "linear",
+      "implementation": "OLS via numpy lstsq",
+      "hyperparameters": "none"
+    },
+    "Ridge": {
+      "type": "linear",
+      "implementation": "Ridge regression via scipy",
+      "hyperparameters": {"alpha": 100.0}
+    },
+    "RF": {
+      "type": "ensemble",
+      "implementation": "sklearn RandomForestRegressor (or pure numpy fallback)",
+      "hyperparameters": {
+        "n_estimators": 500,
+        "max_depth": 15,
+        "min_samples_leaf": 5,
+        "max_features": "sqrt"
+      }
+    },
+    "XGBoost": {
+      "type": "ensemble",
+      "implementation": "xgboost.XGBRegressor",
+      "hyperparameters": {
+        "n_estimators": 200,
+        "max_depth": 6,
+        "learning_rate": 0.05,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "reg_alpha": 0,
+        "reg_lambda": 1
+      }
+    }
+  },
+  "random_seeds": [20260725, 20260726, 20260727],
+  "depth_stratification": {
+    "bins": [
+      {"label": "0-20cm", "lower": 0, "upper": 20},
+      {"label": "20-50cm", "lower": 20, "upper": 50},
+      {"label": "50-100cm", "lower": 50, "upper": 100},
+      {"label": ">100cm", "lower": 100, "upper": 999}
+    ],
+    "grouping_field": "Upper_depth_cm"
+  },
+  "evaluation_metrics": {
+    "primary": ["R2", "RMSE"],
+    "secondary": ["MAE"],
+    "derived": {
+      "delta_R2": "R2_random - R2_spatial (precision overestimation)",
+      "depth_gradient": "R2_surface - R2_deep (depth predictability decline)"
+    }
+  },
+  "analysis_dimensions": [
+    "Overall performance (all depths, all samples)",
+    "Surface vs Deep (is_surface: Upper=0, Lower<=30)",
+    "Depth-stratified (4 bins)",
+    "Spatial block performance variation",
+    "Delta R² by model and depth"
+  ],
+  "hypotheses": {
+    "H1": "Random CV overestimates SOC prediction accuracy compared to spatial block CV (ΔR² > 0)",
+    "H2": "SOC predictability decreases systematically with depth",
+    "H3": "The overestimation from random CV is larger for tree-based models than linear models",
+    "H4": "The overestimation from random CV is larger for deep soil than surface soil"
+  },
+  "pilot_evidence": {
+    "H1_supported": true,
+    "H1_delta_R2_RF": 0.107,
+    "H2_supported": true,
+    "H2_surface_R2": 0.532,
+    "H2_deep_R2": 0.244,
+    "H3_supported": true,
+    "H3_delta_RF": 0.107,
+    "H3_delta_LR": 0.069,
+    "H4_supported": true,
+    "H4_delta_surface": 0.101,
+    "H4_delta_deep": 0.144
+  },
+  "stopping_rules": {
+    "description": "No formal early stopping; all models trained to completion for each seed",
+    "timeout_per_fold_minutes": 30,
+    "total_estimated_time": "2-4 hours (with sklearn/xgboost)"
+  },
+  "deliverables": {
+    "tables": [
+      "results/formal_results.csv — full metrics table",
+      "results/delta_r2_analysis.csv — ΔR² by model and depth",
+      "results/source_data/fig3_performance.csv — source data for main results figure"
+    ],
+    "figures": [
+      "fig1: Study area map with sampling points and climate zones",
+      "fig2: Data overview (depth distribution, SOC distribution, land cover)",
+      "fig3: Model performance comparison (random vs spatial, by depth)",
+      "fig4: Spatial block degradation map (ΔR² spatial distribution)",
+      "fig5: Depth-dependent predictability curve",
+      "fig6: Covariate importance by depth (SHAP or permutation)"
+    ]
+  },
+  "notes": [
+    "Pilot used 20% subsample (1175 profiles, 4035 samples); formal uses all 5877 usable profiles",
+    "XGBoost and sklearn RF require installation; pure numpy fallback available",
+    "Hyperparameter tuning to be done on 20% validation subset before full training",
+    "SHA-256 checksums to be computed and recorded before full training"
+  ]
+}

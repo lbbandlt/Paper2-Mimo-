@@ -1,0 +1,19 @@
+{
+  "RF": {
+    "n_estimators": 500,
+    "max_depth": 15,
+    "min_samples_leaf": 5,
+    "R2_tuning": 0.5327
+  },
+  "XGBoost": {
+    "n_estimators": 200,
+    "max_depth": 6,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "R2_tuning": 0.5535
+  },
+  "Ridge": {
+    "alpha": 100.0,
+    "R2_tuning": 0.446
+  }
+}

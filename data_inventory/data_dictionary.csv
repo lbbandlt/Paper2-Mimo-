@@ -1,0 +1,26 @@
+﻿field_name,dtype,missing_count,missing_pct,unique_count,min,max,mean,description,unit
+Samples,int64,0,0.0,23103,1,23103,11552.0,Row index,
+Profile,int64,0,0.0,7955,1,7955,3121.4893,Profile ID,
+Latitude,float64,0,0.0,7122,18.2583,51.626,33.3747,Latitude (WGS84),°
+Longitude,float64,0,0.0,7499,74.9181,133.9782,109.0489,Longitude (WGS84),°
+Upper_depth_cm,int64,0,0.0,176,0,550,28.2497,Upper depth of layer,cm
+Lower_depth_cm,int64,0,0.0,197,1,750,56.5756,Lower depth of layer,cm
+Depth_cm,str,0,0.0,3469,,,,Depth interval label,
+BD_g_cm3,float64,3119,13.5,5457,0.13,2.59,1.3777,Bulk density,g/cm³
+SOC_g_kg,float64,3119,13.5,4266,0.01,640.4872,11.5662,Soil organic carbon concentration,g/kg
+pH,float64,0,0.0,5727,2.4,10.7,7.0599,Soil pH (water),
+Sand_%,float64,6,0.03,8294,0.91,91.68,32.1026,Sand content,%
+Silt_%,float64,6,0.03,7820,3.34,90.49,45.4828,Silt content,%
+Clay_%,float64,6,0.03,6392,1.92,64.37,22.4148,Clay content,%
+DEM_m,float64,0,0.0,7246,-150.62,5748.85,1141.8091,Elevation from DEM,m
+NDVI,float64,0,0.0,95,-0.16,0.82,0.405,Normalized Difference Vegetation Index,
+MAT_°C,float64,0,0.0,2613,-8.56,25.74,10.9757,Mean annual temperature,°C
+MAP_mm,float64,0,0.0,4427,1.25,192.33,69.1191,Mean annual precipitation,mm
+PET_mm,float64,0,0.0,4745,511.86,2265.17,1266.3451,Potential evapotranspiration,mm
+AI,float64,0,0.0,192,0.01,2.56,0.6788,Aridity index,
+CLCD,str,0,0.0,4,,,,Land cover type (CLCD),
+SOCD_kg_m_2,float64,0,0.0,1628,0.0,400.43,3.1765,Soil organic carbon density,kg/m²
+SOCD_methods,str,0,0.0,2,,,,SOCD calculation method,
+References,str,0,0.0,71,,,,Source reference,
+Time,int64,0,0.0,14,2010,2023,2014.2628,Sampling year,
+log1p_SOC_g_kg,float64,3119,13.5,4266,0.01,6.4638,2.1016,log(1 + SOC_g_kg) transform,

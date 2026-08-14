@@ -1,0 +1,6 @@
+file_role,file_path_or_identifier,sha256,verification_note
+raw_database,SOCS_V10.csv,3cb6a1a1d8f89413e49d88b7fff467abd7cf147bf7bba6f20eebc9d131bf9a00,"China SOCS Database V10; verify after download and before analysis"
+raw_database_readme,data_raw/SOCS_V10_Readme.txt,5abd52c91c0fbcf55d9957e5639e2330f855a2cc8911d96ce4e0d5c46c5f91e7,"Repository copy of the source-data documentation"
+analysis_audit_summary,output_formal/audit_summary.json,8354ab9b7d514c87dc9a06fea4c50d045dd485bcf7e7a55f99ee5e76caa64850,"Machine-readable audit summary used to verify record counts"
+depth_harmonized_dataset,depth_harmonization/standard_depth_coverage_050.csv,7ef30a341ac02f20b89513ed881d7c34c0c3f904f6ccbd2d58cea2cc94e2b491,"Standard-depth data at the 50% coverage threshold"
+profile_interval_quality_control,depth_harmonization/profile_interval_qa.csv,dbc8fdc1ae36935ced6ec76f1a5f3344cead26704ce842b2020bf062d48525bc,"Profile overlap and gap quality-control table"

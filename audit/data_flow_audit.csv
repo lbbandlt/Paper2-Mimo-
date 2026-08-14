@@ -1,0 +1,12 @@
+stage,operation,input_records,output_records,records_removed,input_profiles,output_profiles,profiles_removed,verification
+1,Original database,,23103,,,7955,,"Raw database inventory"
+2,Remove records with missing SOC,23103,19984,3119,7955,5880,2075,"SOC completeness filter"
+3,Remove records with SOC > 200 g kg-1,19984,19944,40,5880,5877,3,"Final layer-level analysis set"
+4,Identify layers crossing 20/50/100 cm boundaries,19944,9446,,5877,,,"9446 of 19944 records; 47.36%"
+5,Exclude profiles with overlapping or indistinguishable parallel layers,19944,,,5877,5701,176,"Eligible profiles for thickness-weighted harmonization"
+6,Harmonize to 0-20 cm at >=50% coverage,,5668,,,5668,,"One record per profile and standard depth"
+7,Harmonize to 20-50 cm at >=50% coverage,,4199,,,4199,,"One record per profile and standard depth"
+8,Harmonize to 50-100 cm at >=50% coverage,,3607,,,3607,,"One record per profile and standard depth"
+9,Harmonize to 100-200 cm at >=50% coverage,,515,,,515,,"One record per profile and standard depth"
+10,Combine four standard-depth outputs,,13989,,,,,"5668 + 4199 + 3607 + 515"
+11,Construct complete same-profile paired subset,,,,,506,,"Profiles represented in all four standard depths"
